@@ -45,80 +45,43 @@ void setup() {
   //servo_1.attach(SERVO1_PWM);
   //servo_2.attach(SERVO2_PWM);
 }
-void loop() {
 
+void loop() {
   Serial.println("RC Car's Arduino is listening.");
   if (Serial.available() > 0) {
     int piCommand = Serial.read() - '0'; //zero trick converts to int
+    Serial.print("Received Pi Command: ");
     Serial.println(piCommand);
-    if(piCommand == 1){
-      motor(2, RELEASE, 0);
-      motor(3, RELEASE, 0);  
-    }
-    else if(piCommand == 2){
+    if (piCommand == 1) {
+      // Forward
+      Serial.println("Moving Forward");
+      motor(2, FORWARD, Speed);
       motor(3, FORWARD, Speed);
-        
-    }
-    else if(piCommand == 3){
-      motor(3, BACKWARD, Speed);  
-    }
-    //else if(Y <= 200){
-    //  motor(3, BACKWARD, Speed);  
-    //}
-    else {
+    } else if (piCommand == 2) {
+      // Backward
+      Serial.println("Moving Backward");
+      motor(2, BACKWARD, Speed);
+      motor(3, BACKWARD, Speed);
+    } else if (piCommand == 3) {
+      // Turn Left
+      Serial.println("Turning Left");
+      motor(2, FORWARD, Speed);
+      motor(3, BACKWARD, Speed);
+    } else if (piCommand == 4) {
+      // Turn Right
+      Serial.println("Turning Right");
+      motor(2, BACKWARD, Speed);
+      motor(3, FORWARD, Speed);
+    } else {
+      // Stop both motors
+      Serial.println("Stopping");
       motor(2, RELEASE, 0);
-      motor(3, RELEASE, 0);    
+      motor(3, RELEASE, 0);
     }
   }
-   
-   /*
-  int X = analogRead(x);
-  int Y = analogRead(y);
+}
 
-  Serial.print(X);
-  Serial.print("\t");
-  Serial.println(Y);
 
-  if(X >= 800){
-      motor(4, BACKWARD, Speed);
-  }
-  else if(X <= 200){
-      motor(4, FORWARD, Speed);
-  }
-  else if(Y >= 800){
-    motor(1, FORWARD, Speed);
-  }
-  else if(Y <= 200){
-    motor(1, BACKWARD, Speed);  
-  }
-  else {
-    motor(1, RELEASE, 0);
-    motor(4, RELEASE, 0);    
-  }
-
-  motor(1, FORWARD, 255);
-  //motor(2, FORWARD, 255);
-  //motor(3, FORWARD, 255);
-  motor(4, FORWARD, 255);
-  +
-  delay(2000); // stop it before reverse.
-  motor(1, RELEASE, 0);
-  //motor(2, RELEASE, 0);
-  //motor(3, RELEASE, 0);
-  motor(4, RELEASE, 0);
-  delay(100);
-  motor(1, BACKWARD, 128);
-  //motor(2, BACKWARD, 128);
-  //motor(3, BACKWARD, 128);
-  motor(4, BACKWARD, 128);
-  delay(2000);
-  motor(1, RELEASE, 0);
-  //motor(2, RELEASE, 0);
-  //motor(3, RELEASE, 0);
-  motor(4, RELEASE, 0);
-  delay(100);
-  */
- }
 
 void motor(int nMotor, int command, int speed) {
   int motorA, motorB;
